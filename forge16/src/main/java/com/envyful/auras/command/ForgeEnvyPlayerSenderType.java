@@ -2,6 +2,7 @@ package com.envyful.auras.command;
 
 import com.envyful.api.command.sender.SenderType;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
+import com.envyful.auras.EnvyAuras;
 import net.minecraft.command.ICommandSource;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
@@ -18,6 +19,6 @@ public class ForgeEnvyPlayerSenderType implements SenderType<ICommandSource, For
 
     @Override
     public ForgeEnvyPlayer getInstance(ICommandSource sender) {
-        return com.envyful.auras.EnvyAuras.getInstance().getPlayerManager().getPlayer((ServerPlayerEntity) sender);
+        return EnvyAuras.getInstance().getPlayerManager().getPlayer((ServerPlayerEntity) sender);
     }
 }
