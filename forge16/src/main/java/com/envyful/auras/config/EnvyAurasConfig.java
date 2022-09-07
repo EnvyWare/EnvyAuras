@@ -5,6 +5,8 @@ import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.auras.particle.AuraConfig;
+import com.envyful.auras.particle.AuraRegistry;
+import com.envyful.auras.particle.AuraType;
 import com.envyful.auras.particle.type.SimpleType;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -43,6 +45,7 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
         private String displayName;
         private AuraConfig typeConfig;
         private ConfigItem auraItem;
+        private transient AuraType type;
 
         public Aura(String id, String displayName, AuraConfig typeConfig, ConfigItem auraItem) {
             this.id = id;
@@ -63,7 +66,15 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
         }
 
         public AuraConfig getTypeConfig() {
-            return this.typeConfig; //TODO:
+            return this.typeConfig;
+        }
+
+        public AuraType asAPI() {
+            if (this.type == null) {
+                this.type = AuraRegistry.createInstance(this);
+            }
+
+            return this.type;
         }
 
         public ItemStack getAuraItem() {

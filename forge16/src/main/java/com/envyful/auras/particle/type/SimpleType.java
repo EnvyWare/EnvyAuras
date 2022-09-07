@@ -1,7 +1,7 @@
 package com.envyful.auras.particle.type;
 
+import com.envyful.auras.config.EnvyAurasConfig;
 import com.envyful.auras.particle.AuraConfig;
-import com.envyful.auras.particle.AuraType;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.entity.Entity;
@@ -20,20 +20,21 @@ public class SimpleType extends AbstractAuraType<SimpleType.SimpleConfig> {
         super("simple");
     }
 
-    public SimpleType(AuraConfig config) {
+    public SimpleType(EnvyAurasConfig.Aura config) {
         this();
 
-        if (!(config instanceof SimpleConfig)) {
+        if (!(config.getTypeConfig() instanceof SimpleConfig)) {
             throw new UnsupportedOperationException("Incorrect config type");
         }
 
-        this.config = (SimpleConfig) config;
+        this.config = config;
+        this.particleConfig = (SimpleConfig) config.getTypeConfig();
     }
 
     @Override
     public void display(ServerWorld world, Entity entity) throws Exception {
-        ParticleType<?> particleType = Registry.PARTICLE_TYPE.get(this.config.getParticle());
-        IParticleData particle = readParticle(new StringReader(this.config.getParticleData()), particleType);
+        ParticleType<?> particleType = Registry.PARTICLE_TYPE.get(this.particleConfig.getParticle());
+        IParticleData particle = readParticle(new StringReader(this.particleConfig.getParticleData()), particleType);
         world.sendParticles(particle, entity.getX(), entity.getY(), entity.getZ(), 10, 2, 2, 2, 0.5f);
     }
 
