@@ -7,6 +7,6 @@ public interface AuraType {
 
     String getId();
 
-    void display(ServerWorld world, Entity entity);
+    void display(ServerWorld world, Entity entity) throws Exception;
 
 }

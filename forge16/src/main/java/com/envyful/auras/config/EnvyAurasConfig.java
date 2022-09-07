@@ -4,6 +4,8 @@ import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.forge.config.UtilConfigItem;
+import com.envyful.auras.particle.AuraConfig;
+import com.envyful.auras.particle.type.SimpleType;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
@@ -18,7 +20,9 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
 
     private Map<String, Aura> auras = ImmutableMap.of(
             "one", new Aura(
-                    "example", "Example Aura", "simple", new ConfigItem(
+                    "example", "Example Aura", new SimpleType.SimpleConfig(
+                            "minecraft:flame", "flame"
+            ), new ConfigItem(
                             "minecraft:stone", 1, "SIMPLE!", Lists.newArrayList("NO!")
             )
             )
@@ -37,13 +41,13 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
 
         private String id;
         private String displayName;
-        private String type;
+        private AuraConfig typeConfig;
         private ConfigItem auraItem;
 
-        public Aura(String id, String displayName, String type, ConfigItem auraItem) {
+        public Aura(String id, String displayName, AuraConfig typeConfig, ConfigItem auraItem) {
             this.id = id;
             this.displayName = displayName;
-            this.type = type;
+            this.typeConfig = typeConfig;
             this.auraItem = auraItem;
         }
 
@@ -58,8 +62,8 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
             return this.displayName;
         }
 
-        public String getType() {
-            return this.type; //TODO:
+        public AuraConfig getTypeConfig() {
+            return this.typeConfig; //TODO:
         }
 
         public ItemStack getAuraItem() {
