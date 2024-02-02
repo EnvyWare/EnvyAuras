@@ -1,13 +1,13 @@
 package com.envyful.auras;
 
-import com.envyful.api.command.sender.SenderTypeFactory;
 import com.envyful.api.concurrency.UtilLogger;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
+import com.envyful.api.forge.platform.ForgePlatformHandler;
 import com.envyful.api.forge.player.ForgePlayerManager;
 import com.envyful.api.gui.factory.GuiFactory;
-import com.envyful.auras.command.ForgeEnvyPlayerSenderType;
+import com.envyful.api.platform.PlatformProxy;
 import com.envyful.auras.config.EnvyAurasConfig;
 import com.envyful.auras.config.EnvyAurasGraphics;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,19 +25,22 @@ public class EnvyAuras {
 
     public static final String MOD_ID = "envyauras";
 
+    private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+
     private static EnvyAuras instance;
 
-    private Logger logger = LogManager.getLogger(MOD_ID);
-
     private ForgePlayerManager playerManager = new ForgePlayerManager();
-    private ForgeCommandFactory commandFactory = new ForgeCommandFactory();
+    private ForgeCommandFactory commandFactory = new ForgeCommandFactory(playerManager);
 
     private EnvyAurasConfig config;
     private EnvyAurasGraphics graphics;
 
     public EnvyAuras() {
         instance = this;
-        UtilLogger.setLogger(this.logger);
+        UtilLogger.setLogger(this.LOGGER);
+        PlatformProxy.setPlayerManager(this.playerManager);
+        PlatformProxy.setHandler(ForgePlatformHandler.getInstance());
+
         MinecraftForge.EVENT_BUS.register(this);
 
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
@@ -50,7 +53,6 @@ public class EnvyAuras {
 
     @SubscribeEvent
     public void registerCommands(RegisterCommandsEvent event) {
-        SenderTypeFactory.register(new ForgeEnvyPlayerSenderType());
 
     }
 
@@ -59,7 +61,7 @@ public class EnvyAuras {
             this.config = YamlConfigFactory.getInstance(EnvyAurasConfig.class);
             this.graphics = YamlConfigFactory.getInstance(EnvyAurasGraphics.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Error loading configs", e);
         }
     }
 
@@ -67,23 +69,23 @@ public class EnvyAuras {
         return instance;
     }
 
-    public Logger getLogger() {
-        return this.logger;
+    public static final Logger getLogger() {
+        return LOGGER;
     }
 
-    public ForgePlayerManager getPlayerManager() {
-        return this.playerManager;
+    public static final ForgePlayerManager getPlayerManager() {
+        return instance.playerManager;
     }
 
-    public ForgeCommandFactory getCommandFactory() {
-        return this.commandFactory;
+    public static final ForgeCommandFactory getCommandFactory() {
+        return instance.commandFactory;
     }
 
-    public EnvyAurasConfig getConfig() {
-        return this.config;
+    public static final EnvyAurasConfig getConfig() {
+        return instance.config;
     }
 
-    public EnvyAurasGraphics getGraphics() {
-        return this.graphics;
+    public static final EnvyAurasGraphics getGraphics() {
+        return instance.graphics;
     }
 }
