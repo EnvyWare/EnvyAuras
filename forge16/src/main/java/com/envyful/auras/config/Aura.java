@@ -4,12 +4,10 @@ import com.envyful.api.config.data.TypeSerializers;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.forge.config.UtilConfigItem;
+import com.envyful.api.jexl.config.CalculationConfig;
 import com.envyful.auras.particle.AuraType;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import net.minecraft.item.ItemStack;
-import org.apache.commons.jexl3.JexlBuilder;
-import org.apache.commons.jexl3.JexlEngine;
-import org.apache.commons.jexl3.JexlExpression;
 import org.apache.commons.jexl3.MapContext;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
@@ -17,15 +15,11 @@ import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 @TypeSerializers(clazz = AuraType.class, serializer = AuraTypeSerializer.class)
 public class Aura extends AbstractYamlConfig {
 
-    private static final JexlEngine JEXL_ENGINE = new JexlBuilder()
-            .create();
-
     private String id;
     private String displayName;
     private ConfigItem displayItem;
     private AuraType aura;
-    private String displayCalculation;
-    private transient JexlExpression displayExpression;
+    private CalculationConfig displayCalculation;
 
     protected Aura(Builder builder) {
         this();
@@ -34,7 +28,7 @@ public class Aura extends AbstractYamlConfig {
         this.displayName = builder.displayName;
         this.displayItem = builder.displayItem;
         this.aura = builder.aura;
-        this.displayCalculation = builder.displayCalculation;
+        this.displayCalculation = new CalculationConfig(builder.displayCalculation);
     }
 
     public Aura() {
@@ -60,12 +54,10 @@ public class Aura extends AbstractYamlConfig {
     }
 
     public boolean shouldDisplay(PixelmonEntity entity) {
-        if (this.displayCalculation == null || this.displayCalculation.isEmpty()) {
-            return true;
-        }
+        var expression = this.displayCalculation.getExpression();
 
-        if (this.displayExpression == null) {
-            this.displayExpression = JEXL_ENGINE.createExpression(this.displayCalculation);
+        if (expression == null) {
+            return true;
         }
 
         var context = new MapContext();
@@ -75,7 +67,7 @@ public class Aura extends AbstractYamlConfig {
         context.set("shiny", entity.getPokemon().isShiny());
         context.set("tick", entity.tickCount);
 
-        return (boolean) this.displayExpression.evaluate(context);
+        return (boolean) expression.evaluate(context);
     }
 
     public AuraType type() {
