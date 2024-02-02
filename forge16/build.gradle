@@ -49,6 +49,7 @@ shadowJar {
     relocate('org.reactivestreams', 'com.envyful.auras.shade.reactivestreams')
     relocate('reactor', 'com.envyful.auras.shade.reactor')
     relocate('com.mysql', 'com.envyful.auras.shade.mysql')
+    relocate('org.apache.commons.jexl', 'com.envyful.auras.shade.jexl3')
 
     exclude "com/google/**"
     exclude "javax/**"
