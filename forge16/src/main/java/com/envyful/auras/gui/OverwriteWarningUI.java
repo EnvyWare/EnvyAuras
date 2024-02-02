@@ -9,6 +9,8 @@ import com.envyful.api.forge.config.UtilConfigItem;
 import com.envyful.api.forge.player.ForgeEnvyPlayer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.gui.pane.Pane;
+import com.envyful.api.platform.PlatformProxy;
+import com.envyful.api.text.Placeholder;
 import com.envyful.api.type.Pair;
 import com.envyful.auras.EnvyAuras;
 import com.envyful.auras.config.Aura;
@@ -69,7 +71,10 @@ public class OverwriteWarningUI {
                 .clickHandler((envyPlayer, clickType) -> {
                     player.getParent().closeContainer();
                     pixelmon.getPokemon().getPersistentData().putString("ENVY_AURAS", aura.id());
-                    //TODO: message
+                    PlatformProxy.sendMessage(player, EnvyAuras.getLocale().getOverwritten(),
+                            Placeholder.simple("%old_aura%", EnvyAuras.getConfig().auraFromPokemon(pixelmon).displayName()),
+                            Placeholder.simple("%new_aura%", aura.displayName()),
+                            Placeholder.simple("%pokemon%", pixelmon.getPokemon().getDisplayName()));
                 })
                 .extendedConfigItem(player, pane, this.confirmButton);
 
@@ -79,7 +84,7 @@ public class OverwriteWarningUI {
                 .clickHandler((envyPlayer, clickType) -> {
                     player.getParent().closeContainer();
                     player.getParent().inventory.add(aura.getItem(1));
-                    //TODO: message
+                    PlatformProxy.sendMessage(player, EnvyAuras.getLocale().getCancelOverwrite());
                 })
                 .extendedConfigItem(player, pane, this.cancelButton);
 
