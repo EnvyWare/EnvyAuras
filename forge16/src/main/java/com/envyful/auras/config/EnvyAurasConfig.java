@@ -94,6 +94,21 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
                                 new CalculationConfig("entityZ"),
                                 100, 0.5))
                         .displayCalculation("tick % 10 == 0")
+                        .build()),
+                DefaultConfig.onlyNew("default/example6.yml", Aura.builder()
+                        .id("example6")
+                        .displayName("&a&lExample 6!")
+                        .displayItem(ConfigItem.builder()
+                                .type("minecraft:stone")
+                                .name("&a&lExample 6!")
+                                .amount(1)
+                                .build())
+                        .aura(new RotatingSpiralAuraType("flame",
+                                new CalculationConfig("entityX"),
+                                new CalculationConfig("entityY"),
+                                new CalculationConfig("entityZ"),
+                                1.25, 3, 1000))
+                        .displayCalculation("tick % 10 == 0")
                         .build()));
     }
 

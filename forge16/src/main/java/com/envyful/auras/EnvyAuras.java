@@ -59,7 +59,7 @@ public class EnvyAuras {
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new PlayerInteractListener());
 
-        UtilConcurrency.runRepeatingTask(new AuraTask(), 100, 50, TimeUnit.MILLISECONDS);
+        UtilConcurrency.runRepeatingTask(new AuraTask(), 100, 25, TimeUnit.MILLISECONDS);
     }
 
     @SubscribeEvent

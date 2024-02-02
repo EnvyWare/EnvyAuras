@@ -4,12 +4,19 @@ import com.envyful.auras.EnvyAuras;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class AuraTask implements Runnable {
+
+    public static final AtomicInteger COUNTER = new AtomicInteger(0);
+
     @Override
     public void run() {
         if (ServerLifecycleHooks.getCurrentServer() == null || ServerLifecycleHooks.getCurrentServer().getAllLevels() == null) {
             return;
         }
+
+        COUNTER.incrementAndGet();
 
         for (var allLevel : ServerLifecycleHooks.getCurrentServer().getAllLevels()) {
             for (var allEntity : allLevel.getAllEntities()) {
