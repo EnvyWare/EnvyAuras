@@ -6,10 +6,7 @@ import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.config.yaml.DefaultConfig;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.jexl.config.CalculationConfig;
-import com.envyful.auras.particle.type.PositionedSphereAuraType;
-import com.envyful.auras.particle.type.SimpleParticlesAuraType;
-import com.envyful.auras.particle.type.SpiralAuraType;
-import com.envyful.auras.particle.type.WingsAuraType;
+import com.envyful.auras.particle.type.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -81,6 +78,21 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
                                 new CalculationConfig("entityY + (entityHeight / 2)"),
                                 new CalculationConfig("entityZ"),
                                 0.5, 0.01))
+                        .displayCalculation("tick % 10 == 0")
+                        .build()),
+                DefaultConfig.onlyNew("default/example5.yml", Aura.builder()
+                        .id("example5")
+                        .displayName("&a&lExample 5!")
+                        .displayItem(ConfigItem.builder()
+                                .type("minecraft:stone")
+                                .name("&a&lExample 5!")
+                                .amount(1)
+                                .build())
+                        .aura(new HaloAuraType("flame",
+                                new CalculationConfig("entityX"),
+                                new CalculationConfig("entityY + entityHeight"),
+                                new CalculationConfig("entityZ"),
+                                100, 0.5))
                         .displayCalculation("tick % 10 == 0")
                         .build()));
     }

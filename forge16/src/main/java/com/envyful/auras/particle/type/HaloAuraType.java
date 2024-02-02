@@ -9,7 +9,6 @@ import com.pixelmonmod.pixelmon.api.util.helpers.ResourceLocationHelper;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import net.minecraft.network.play.server.SSpawnParticlePacket;
 import net.minecraft.particles.IParticleData;
-import net.minecraft.util.math.vector.Vector2f;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.server.ServerWorld;
@@ -18,9 +17,9 @@ import org.apache.commons.jexl3.JexlContext;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
-@AuraData("wings")
+@AuraData("halo")
 @ConfigSerializable
-public class WingsAuraType extends IdentifiableAuraType {
+public class HaloAuraType extends IdentifiableAuraType {
 
     @Comment("This sets the particle type to use")
     private String particleType;
@@ -35,31 +34,31 @@ public class WingsAuraType extends IdentifiableAuraType {
     @Comment("This sets the z coordinate for the center of the sphere. Use 'entityZ' to use the entity's z coordinate")
     private CalculationConfig zCenterCalculation;
 
-    @Comment("This sets the size of the wings")
-    private double size;
-
     @Comment("This sets the amount of particles to generate")
-    private double angleDelta;
+    private int particleCount;
+
+    @Comment("This sets the radius of the sphere")
+    private double radius;
 
 
-    public WingsAuraType() {
+    public HaloAuraType() {
         super();
     }
 
-    public WingsAuraType(String particleType,
-                         CalculationConfig xCenterCalculation,
-                         CalculationConfig yCenterCalculation,
-                         CalculationConfig zCenterCalculation,
-                         double size,
-                         double angleDelta) {
+    public HaloAuraType(String particleType,
+                        CalculationConfig xCenterCalculation,
+                        CalculationConfig yCenterCalculation,
+                        CalculationConfig zCenterCalculation,
+                        int particleCount,
+                        double radius) {
         super();
 
         this.particleType = particleType;
         this.xCenterCalculation = xCenterCalculation;
         this.yCenterCalculation = yCenterCalculation;
         this.zCenterCalculation = zCenterCalculation;
-        this.size = size;
-        this.angleDelta = angleDelta;
+        this.particleCount = particleCount;
+        this.radius = radius;
     }
 
     @Override
@@ -77,24 +76,18 @@ public class WingsAuraType extends IdentifiableAuraType {
         var posY = (double) this.yCenterCalculation.getExpression().evaluate(context);
         var posZ = (double) this.zCenterCalculation.getExpression().evaluate(context);
         var center = new Vector3d(posX, posY, posZ);
-        double t = 0;
 
-        while (t <= Math.PI * 2) {
-            var x = this.size * (Math.sin(t) * (Math.exp(Math.cos(t)) - 2 * Math.cos(4 * t) - Math.pow(Math.sin(t / 12), 5)));
-            var y = this.size * (Math.cos(t) * (Math.exp(Math.cos(t)) - 2 * Math.cos(4 * t) - Math.pow(Math.sin(t / 12), 5)));
-            var yawRad = (float) Math.toRadians(entity.getRotationVector().y);
-            var vec = new Vector2f((float) x, 0);
-            var newX = vec.x * (float) Math.cos(yawRad) - vec.y * (float) Math.sin(yawRad);
-            var newZ = vec.x * (float) Math.sin(yawRad) + vec.y * (float) Math.cos(yawRad);
-            var facing = entity.getDirection().getOpposite();
+        for (int i = 0; i < particleCount; ++i) {
+            double angle = ((double) i / particleCount) * 2 * Math.PI;
+
+            var x = this.radius * Math.cos(angle);
+            var z = this.radius * Math.sin(angle);
 
             var packet = new SSpawnParticlePacket(particles, true,
-                    center.x() + newX + facing.getStepX() / 2.0, center.y() + y, center.z() + newZ + facing.getStepZ() / 2.0,
+                    center.x() + x, center.y(), center.z() + z,
                     0.0F, 0.0F, 0.0F, 0.0F, 1);
 
             PacketDistributor.TRACKING_ENTITY.with(() -> entity).send(packet);
-
-            t += this.angleDelta;
         }
     }
 
