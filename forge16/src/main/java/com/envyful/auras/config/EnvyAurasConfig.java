@@ -3,82 +3,67 @@ package com.envyful.auras.config;
 import com.envyful.api.config.data.ConfigPath;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
-import com.envyful.api.forge.config.UtilConfigItem;
-import com.envyful.auras.particle.AuraConfig;
-import com.envyful.auras.particle.AuraRegistry;
-import com.envyful.auras.particle.AuraType;
-import com.envyful.auras.particle.type.SimpleType;
-import com.google.common.collect.ImmutableMap;
+import com.envyful.api.config.yaml.DefaultConfig;
+import com.envyful.api.config.yaml.YamlConfigFactory;
+import com.envyful.auras.particle.type.SimpleParticlesAuraType;
 import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.particles.ParticleTypes;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @ConfigSerializable
 @ConfigPath("config/EnvyAuras/config.yml")
 public class EnvyAurasConfig extends AbstractYamlConfig {
 
-    private Map<String, Aura> auras = ImmutableMap.of(
-            "one", new Aura(
-                    "example", "Example Aura", new SimpleType.SimpleConfig(
-                            "minecraft:flame", "flame"
-            ), new ConfigItem(
-                            "minecraft:stone", 1, "SIMPLE!", Lists.newArrayList("NO!")
-            )
-            )
-    );
+    private transient List<Aura> auras = Lists.newArrayList();
 
-    public EnvyAurasConfig() {
+    public EnvyAurasConfig() throws IOException {
         super();
+
+        this.auras = YamlConfigFactory.getInstances(Aura.class, "config/EnvyAuras/auras",
+                DefaultConfig.onlyNew("default/example.yml", Aura.builder()
+                                .id("example")
+                                .displayName("&a&lExample!")
+                                .displayItem(ConfigItem.builder()
+                                        .type("minecraft:stone")
+                                        .name("&a&lExample!")
+                                        .amount(1)
+                                        .build())
+                                .aura(new SimpleParticlesAuraType("flame", 10))
+                                .displayCalculation("tick % 5 == 0")
+                        .build()));
     }
 
     public List<Aura> getAuras() {
-        return Lists.newArrayList(this.auras.values());
+        return this.auras;
     }
 
-    @ConfigSerializable
-    public static class Aura {
-
-        private String id;
-        private String displayName;
-        private AuraConfig typeConfig;
-        private ConfigItem auraItem;
-        private transient AuraType type;
-
-        public Aura(String id, String displayName, AuraConfig typeConfig, ConfigItem auraItem) {
-            this.id = id;
-            this.displayName = displayName;
-            this.typeConfig = typeConfig;
-            this.auraItem = auraItem;
-        }
-
-        public Aura() {
-        }
-
-        public String getId() {
-            return this.id;
-        }
-
-        public String getDisplayName() {
-            return this.displayName;
-        }
-
-        public AuraConfig getTypeConfig() {
-            return this.typeConfig;
-        }
-
-        public AuraType asAPI() {
-            if (this.type == null) {
-                this.type = AuraRegistry.createInstance(this);
+    public Aura auraFromId(String id) {
+        for (var aura : this.auras) {
+            if (aura.id().equalsIgnoreCase(id)) {
+                return aura;
             }
-
-            return this.type;
         }
 
-        public ItemStack getAuraItem() {
-            return UtilConfigItem.fromConfigItem(this.auraItem);
-        }
+        return null;
     }
+
+    public Aura auraFromItem(ItemStack itemStack) {
+        if (itemStack == null || itemStack.getItem() == Items.AIR) {
+            return null;
+        }
+
+        var nbt = itemStack.getTag();
+
+        if (!nbt.contains("aura")) {
+            return null;
+        }
+
+        return this.auraFromId(nbt.getString("aura"));
+    }
+
 }
