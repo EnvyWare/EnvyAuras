@@ -5,11 +5,12 @@ import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.config.yaml.DefaultConfig;
 import com.envyful.api.config.yaml.YamlConfigFactory;
+import com.envyful.api.jexl.config.CalculationConfig;
 import com.envyful.auras.particle.type.SimpleParticlesAuraType;
+import com.envyful.auras.particle.type.PositionedSphereAuraType;
 import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.particles.ParticleTypes;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.io.IOException;
@@ -33,8 +34,23 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
                                         .name("&a&lExample!")
                                         .amount(1)
                                         .build())
-                                .aura(new SimpleParticlesAuraType("flame", 10))
+                                .aura(new SimpleParticlesAuraType("flame", 10, 0.15F))
                                 .displayCalculation("tick % 5 == 0")
+                        .build()),
+                DefaultConfig.onlyNew("default/example2.yml", Aura.builder()
+                        .id("example2")
+                        .displayName("&a&lExample 2!")
+                        .displayItem(ConfigItem.builder()
+                                .type("minecraft:stone")
+                                .name("&a&lExample 2!")
+                                .amount(1)
+                                .build())
+                        .aura(new PositionedSphereAuraType("flame",
+                                new CalculationConfig("entityX"),
+                                new CalculationConfig("entityY + entityHeight"),
+                                new CalculationConfig("entityZ"),
+                                0.25, 100, true, true))
+                        .displayCalculation("tick % 10 == 0")
                         .build()));
     }
 

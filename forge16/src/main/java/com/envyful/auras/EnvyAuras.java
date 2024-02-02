@@ -49,7 +49,7 @@ public class EnvyAuras {
     public EnvyAuras() {
         instance = this;
 
-        UtilLogger.setLogger(this.LOGGER);
+        UtilLogger.setLogger(LOGGER);
         PlatformProxy.setPlayerManager(this.playerManager);
         PlatformProxy.setHandler(ForgePlatformHandler.getInstance());
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
