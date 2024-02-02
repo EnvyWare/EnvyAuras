@@ -8,6 +8,7 @@ import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.jexl.config.CalculationConfig;
 import com.envyful.auras.particle.type.SimpleParticlesAuraType;
 import com.envyful.auras.particle.type.PositionedSphereAuraType;
+import com.envyful.auras.particle.type.SpiralAuraType;
 import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -50,6 +51,21 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
                                 new CalculationConfig("entityY + entityHeight"),
                                 new CalculationConfig("entityZ"),
                                 0.25, 100, true, true))
+                        .displayCalculation("tick % 10 == 0")
+                        .build()),
+                DefaultConfig.onlyNew("default/example3.yml", Aura.builder()
+                        .id("example3")
+                        .displayName("&a&lExample 3!")
+                        .displayItem(ConfigItem.builder()
+                                .type("minecraft:stone")
+                                .name("&a&lExample 3!")
+                                .amount(1)
+                                .build())
+                        .aura(new SpiralAuraType("flame",
+                                new CalculationConfig("entityX"),
+                                new CalculationConfig("entityY"),
+                                new CalculationConfig("entityZ"),
+                                1.25, 3, 1000))
                         .displayCalculation("tick % 10 == 0")
                         .build()));
     }
