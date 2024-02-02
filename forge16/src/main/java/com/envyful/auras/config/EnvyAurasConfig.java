@@ -6,10 +6,10 @@ import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.config.yaml.DefaultConfig;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.jexl.config.CalculationConfig;
-import com.envyful.auras.particle.type.SimpleParticlesAuraType;
 import com.envyful.auras.particle.type.PositionedSphereAuraType;
+import com.envyful.auras.particle.type.SimpleParticlesAuraType;
 import com.envyful.auras.particle.type.SpiralAuraType;
-import com.google.common.collect.Lists;
+import com.envyful.auras.particle.type.WingsAuraType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -21,7 +21,7 @@ import java.util.List;
 @ConfigPath("config/EnvyAuras/config.yml")
 public class EnvyAurasConfig extends AbstractYamlConfig {
 
-    private transient List<Aura> auras = Lists.newArrayList();
+    private transient List<Aura> auras;
 
     public EnvyAurasConfig() throws IOException {
         super();
@@ -66,6 +66,21 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
                                 new CalculationConfig("entityY"),
                                 new CalculationConfig("entityZ"),
                                 1.25, 3, 1000))
+                        .displayCalculation("tick % 10 == 0")
+                        .build()),
+                DefaultConfig.onlyNew("default/example4.yml", Aura.builder()
+                        .id("example4")
+                        .displayName("&a&lExample 4!")
+                        .displayItem(ConfigItem.builder()
+                                .type("minecraft:stone")
+                                .name("&a&lExample 4!")
+                                .amount(1)
+                                .build())
+                        .aura(new WingsAuraType("flame",
+                                new CalculationConfig("entityX"),
+                                new CalculationConfig("entityY + (entityHeight / 2)"),
+                                new CalculationConfig("entityZ"),
+                                0.5, 0.01))
                         .displayCalculation("tick % 10 == 0")
                         .build()));
     }
