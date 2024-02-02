@@ -31,7 +31,7 @@ public class AuraTask implements Runnable {
                     continue;
                 }
 
-                var aura = EnvyAuras.getConfig().auraFromId(pokemon.getPersistentData().getString("ENVY_AURAS"));
+                var aura = EnvyAuras.getConfig().auraFromPokemon(pixelmon);
 
                 if (aura == null) {
                     EnvyAuras.getLogger().error("Invalid aura type {} for pokemon with uuid {}", pokemon.getPersistentData().getString("ENVY_AURAS"), pokemon.getUUID());

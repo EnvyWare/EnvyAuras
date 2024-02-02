@@ -7,6 +7,8 @@ import com.envyful.api.config.yaml.DefaultConfig;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.jexl.config.CalculationConfig;
 import com.envyful.auras.particle.type.*;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
@@ -138,6 +140,20 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
         }
 
         return this.auraFromId(nbt.getString("aura"));
+    }
+
+    public Aura auraFromPokemon(PixelmonEntity pixelmon) {
+        return this.auraFromPokemon(pixelmon.getPokemon());
+    }
+
+    public Aura auraFromPokemon(Pokemon pokemon) {
+        var nbt = pokemon.getPersistentData();
+
+        if (!nbt.contains("ENVY_AURAS")) {
+            return null;
+        }
+
+        return this.auraFromId(nbt.getString("ENVY_AURAS"));
     }
 
 }

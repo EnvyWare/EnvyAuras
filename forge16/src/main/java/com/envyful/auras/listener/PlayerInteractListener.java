@@ -31,6 +31,13 @@ public class PlayerInteractListener {
             return;
         }
 
+        if (pixelmon.getPokemon().getPersistentData().contains("ENVY_AURAS")) {
+            itemInHand.shrink(1);
+            var pokemonAura = EnvyAuras.getConfig().auraFromPokemon(pixelmon);
+            EnvyAuras.getGraphics().getOverwriteWarningUI().open(EnvyAuras.getPlayerManager().getPlayer(player), aura, pixelmon);
+            return;
+        }
+
         pixelmon.getPokemon().getPersistentData().putString("ENVY_AURAS", aura.id());
         //TODO: success message
         itemInHand.shrink(1);
