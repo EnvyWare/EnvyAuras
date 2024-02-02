@@ -1,5 +1,7 @@
 package com.envyful.auras.listener;
 
+import com.envyful.api.platform.PlatformProxy;
+import com.envyful.api.text.Placeholder;
 import com.envyful.auras.EnvyAuras;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -27,19 +29,20 @@ public class PlayerInteractListener {
         event.setCanceled(true);
 
         if (!pixelmon.isOwnedBy(player)) {
-            //TODO: error + bypass logic
+            PlatformProxy.sendMessage(player, EnvyAuras.getLocale().getCannotSetOthersAuras());
             return;
         }
 
         if (pixelmon.getPokemon().getPersistentData().contains("ENVY_AURAS")) {
             itemInHand.shrink(1);
-            var pokemonAura = EnvyAuras.getConfig().auraFromPokemon(pixelmon);
             EnvyAuras.getGraphics().getOverwriteWarningUI().open(EnvyAuras.getPlayerManager().getPlayer(player), aura, pixelmon);
             return;
         }
 
         pixelmon.getPokemon().getPersistentData().putString("ENVY_AURAS", aura.id());
-        //TODO: success message
+        PlatformProxy.sendMessage(player, EnvyAuras.getLocale().getAuraSet(),
+                Placeholder.simple("%aura%", aura.displayName()),
+                Placeholder.simple("%pokemon%", pixelmon.getDisplayName().getString()));
         itemInHand.shrink(1);
     }
 
