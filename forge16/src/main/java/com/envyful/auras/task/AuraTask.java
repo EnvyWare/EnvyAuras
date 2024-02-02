@@ -31,11 +31,15 @@ public class AuraTask implements Runnable {
                     continue;
                 }
 
-                if (!aura.shouldDisplay(pixelmon)) {
-                    continue;
-                }
+                try {
+                    if (!aura.shouldDisplay(pixelmon)) {
+                        continue;
+                    }
 
-                aura.type().display(allLevel, pixelmon);
+                    aura.type().display(allLevel, pixelmon);
+                } catch (Exception e) { // This has to exist because for some reason setting the uncaught exception handler still isn't logging my errors -_-
+                    EnvyAuras.getLogger().error("Failed to display aura for pokemon with uuid {}", pokemon.getUUID(), e);
+                }
             }
         }
     }
