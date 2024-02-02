@@ -1,15 +1,14 @@
 package com.envyful.auras.particle;
 
-import com.envyful.auras.config.EnvyAurasConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.server.ServerWorld;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
+@ConfigSerializable
 public interface AuraType {
 
-    String getId();
+    String id();
 
-    EnvyAurasConfig.Aura asConfig();
-
-    void display(ServerWorld world, Entity entity) throws Exception;
+    void display(ServerWorld world, Entity entity);
 
 }
