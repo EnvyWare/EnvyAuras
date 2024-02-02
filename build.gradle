@@ -12,6 +12,10 @@ subprojects {
         forgeVersion = "none"
     }
 
+    jar {
+        setArchiveBaseName("${rootProject.name}-Forge")
+    }
+
     repositories {
         mavenCentral()
         maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
