@@ -135,6 +135,10 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
 
         var nbt = itemStack.getTag();
 
+        if (nbt == null) {
+            return null;
+        }
+
         if (!nbt.contains("aura")) {
             return null;
         }
