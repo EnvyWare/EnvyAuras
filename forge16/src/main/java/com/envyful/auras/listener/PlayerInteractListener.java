@@ -17,6 +17,10 @@ public class PlayerInteractListener {
             return;
         }
 
+        if(event.getHand() != Hand.MAIN_HAND) {
+            return;
+        }
+
         var pixelmon = (PixelmonEntity) event.getTarget();
         var player = (ServerPlayerEntity) event.getPlayer();
         var itemInHand = player.getItemInHand(Hand.MAIN_HAND);
