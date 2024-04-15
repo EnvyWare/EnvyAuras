@@ -125,7 +125,7 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
                                 new CalculationConfig("entityY + entityHeight"),
                                 new CalculationConfig("entityZ"),
                                 0, 0))
-                        .displayCalculation("tick % 20 == 0")
+                        .displayCalculation("1 == 2")
                         .build()));
     }
 
