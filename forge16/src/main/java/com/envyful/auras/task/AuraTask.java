@@ -45,7 +45,7 @@ public class AuraTask implements Runnable {
 
                     aura.type().display(allLevel, pixelmon);
                 } catch (Exception e) { // This has to exist because for some reason setting the uncaught exception handler still isn't logging my errors -_-
-                    EnvyAuras.getLogger().error("Failed to display aura for pokemon with uuid {}", pokemon.getUUID(), e);
+                    EnvyAuras.getLogger().error("Failed to display aura for pokemon with uuid {} for aura {}", pokemon.getUUID(), aura.id(), e);
                 }
             }
         }
