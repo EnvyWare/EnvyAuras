@@ -17,7 +17,13 @@ import com.envyful.auras.config.EnvyAurasGraphics;
 import com.envyful.auras.config.EnvyAurasLocale;
 import com.envyful.auras.listener.PlayerInteractListener;
 import com.envyful.auras.particle.AuraRegistry;
+import com.envyful.auras.requirement.AuraRequirement;
 import com.envyful.auras.task.AuraTask;
+import com.pixelmonmod.api.pokemon.PokemonSpecificationProxy;
+import com.pixelmonmod.pixelmon.Pixelmon;
+import com.pixelmonmod.pixelmon.api.command.PixelmonCommandUtils;
+import com.pixelmonmod.pixelmon.api.events.init.PixelmonInitEvent;
+import com.pixelmonmod.tcg.api.accessors.RequirementRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -57,6 +63,7 @@ public class EnvyAuras {
         AuraRegistry.init();
 
         MinecraftForge.EVENT_BUS.register(this);
+        Pixelmon.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new PlayerInteractListener());
 
         UtilConcurrency.runRepeatingTask(new AuraTask(), 100, 25, TimeUnit.MILLISECONDS);
@@ -65,6 +72,11 @@ public class EnvyAuras {
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
         this.reloadConfig();
+    }
+
+    @SubscribeEvent
+    public void onSetupEvent(PixelmonInitEvent event){
+        PokemonSpecificationProxy.register(new AuraRequirement());
     }
 
     @SubscribeEvent

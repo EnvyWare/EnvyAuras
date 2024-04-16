@@ -111,6 +111,21 @@ public class EnvyAurasConfig extends AbstractYamlConfig {
                                 new CalculationConfig("entityZ"),
                                 1.25, 3, 1000))
                         .displayCalculation("tick % 10 == 0")
+                        .build()),
+                DefaultConfig.onlyNew("default/none.yml", Aura.builder()
+                        .id("none")
+                        .displayName("&a&lNone!")
+                        .displayItem(ConfigItem.builder()
+                                .type("minecraft:stone")
+                                .name("&a&lNone!")
+                                .amount(1)
+                                .build())
+                        .aura(new HaloAuraType("flame",
+                                new CalculationConfig("entityX"),
+                                new CalculationConfig("entityY + entityHeight"),
+                                new CalculationConfig("entityZ"),
+                                0, 0))
+                        .displayCalculation("1 == 2")
                         .build()));
     }
 
