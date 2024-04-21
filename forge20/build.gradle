@@ -1,0 +1,67 @@
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+}
+
+forgeVersion = "1.20.2"
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'official', version: '1.20.2'
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.2-48.0.30'
+
+    implementation 'pixelmon:Pixelmon-1.20.2-9.2.7-server:9.2.7'
+    shadow group: 'org.spongepowered', name: 'configurate-yaml', version: '4.2.0-COMMENTS'
+    shadow group: 'org.apache.commons', name: 'commons-jexl3', version: '3.2.1'
+
+    shadow (group: 'com.envyful.api', name: 'commons', version: '6.1.7')
+    shadow (group: 'com.envyful.api', name: 'forge20', version: '6.1.7') {
+        transitive = false
+    }
+    shadow (group: 'com.envyful.api', name: 'reforged20', version: '6.1.7') {
+        transitive = false
+    }
+    shadow (group: 'com.envyful.api', name: 'jexl', version: '6.1.7') {
+        transitive = false
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+    setArchiveClassifier('')
+    setArchiveBaseName("${rootProject.name}-Forge")
+
+    relocate('org.spongepowered.configurate', 'com.envyful.auras.shade.configurate')
+    relocate('org.yaml.snakeyaml', 'com.envyful.auras.shade.snakeyaml')
+    relocate('io.leangen.geantyref', 'com.envyful.auras.shade.geantyref')
+    relocate('com.zaxxer', 'com.envyful.auras.shade.hikari')
+    relocate('org.slf4j', 'com.envyful.auras.shade.slf4j')
+    relocate('com.envyful.api', 'com.envyful.auras.shade.envy.api')
+    relocate('org.bstats', 'com.envyful.auras.shade.bstats')
+    relocate('io.netty', 'com.envyful.auras.shade.netty')
+    relocate('io.lettuce', 'com.envyful.auras.shade.lettuce')
+    relocate('com.cronutils', 'com.envyful.auras.shade.cronutils')
+    relocate('com.sun.el', 'com.envyful.auras.shade.sun.el')
+    relocate('org.reactivestreams', 'com.envyful.auras.shade.reactivestreams')
+    relocate('reactor', 'com.envyful.auras.shade.reactor')
+    relocate('com.mysql', 'com.envyful.auras.shade.mysql')
+    relocate('org.apache.commons.jexl', 'com.envyful.auras.shade.jexl3')
+
+    exclude "com/google/**"
+    exclude "javax/**"
+    exclude "**/module-info.class"
+    exclude "META-INF/versions/9/**"
+    exclude "META-INF/native-image/**"
+    exclude "META-INF/services/**"
+}
+
+jar.finalizedBy('shadowJar')
+shadowJar.finalizedBy('reobfJar')
+build.finalizedBy('versionedRelease')

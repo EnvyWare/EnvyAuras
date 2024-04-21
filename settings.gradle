@@ -15,4 +15,4 @@ plugins {
 }
 
 rootProject.name = 'EnvyAuras'
-include 'forge16'
+include 'forge16', 'forge20'
