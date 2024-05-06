@@ -7,6 +7,7 @@ import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
 import com.envyful.api.forge.platform.ForgePlatformHandler;
 import com.envyful.api.forge.player.ForgePlayerManager;
+import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.platform.PlatformProxy;
 import com.envyful.auras.command.AuraTabCompleter;
@@ -59,6 +60,9 @@ public class EnvyAuras {
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
 
         AuraRegistry.init();
+
+        UtilPlayer.registerPermission("com.envyful.auras.command.auras");
+        UtilPlayer.registerPermission("com.envyful.auras.command.give");
 
         MinecraftForge.EVENT_BUS.register(this);
         Pixelmon.EVENT_BUS.register(this);
