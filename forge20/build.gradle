@@ -38,6 +38,7 @@ shadowJar {
     setArchiveClassifier('')
     setArchiveBaseName("${rootProject.name}-Forge")
 
+    relocate('org.apache.logging', 'com.envyful.auras.shade.log4j')
     relocate('org.spongepowered.configurate', 'com.envyful.auras.shade.configurate')
     relocate('org.yaml.snakeyaml', 'com.envyful.auras.shade.snakeyaml')
     relocate('io.leangen.geantyref', 'com.envyful.auras.shade.geantyref')
@@ -54,8 +55,8 @@ shadowJar {
     relocate('com.mysql', 'com.envyful.auras.shade.mysql')
     relocate('org.apache.commons.jexl', 'com.envyful.auras.shade.jexl3')
 
-    exclude "org/apache/logging/log4j/**"
     exclude "com/google/**"
+    exclude "org/apache/commons/logging/**"
     exclude "javax/**"
     exclude "**/module-info.class"
     exclude "META-INF/versions/9/**"
