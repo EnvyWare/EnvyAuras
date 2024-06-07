@@ -1,6 +1,5 @@
 package com.envyful.auras.config;
 
-import com.envyful.api.config.data.TypeSerializers;
 import com.envyful.api.config.type.ConfigItem;
 import com.envyful.api.config.yaml.AbstractYamlConfig;
 import com.envyful.api.forge.config.UtilConfigItem;
@@ -12,7 +11,6 @@ import org.apache.commons.jexl3.MapContext;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 @ConfigSerializable
-@TypeSerializers(clazz = AuraType.class, serializer = AuraTypeSerializer.class)
 public class Aura extends AbstractYamlConfig {
 
     private String id;

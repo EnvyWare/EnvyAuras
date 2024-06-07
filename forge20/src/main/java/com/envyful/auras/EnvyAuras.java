@@ -2,22 +2,20 @@ package com.envyful.auras;
 
 import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.concurrency.UtilLogger;
+import com.envyful.api.config.ConfigTypeSerializer;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
 import com.envyful.api.forge.platform.ForgePlatformHandler;
 import com.envyful.api.forge.player.ForgePlayerManager;
-import com.envyful.api.forge.player.util.UtilPlayer;
 import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.platform.PlatformProxy;
 import com.envyful.auras.command.AuraTabCompleter;
 import com.envyful.auras.command.AurasCommand;
-import com.envyful.auras.config.Aura;
-import com.envyful.auras.config.EnvyAurasConfig;
-import com.envyful.auras.config.EnvyAurasGraphics;
-import com.envyful.auras.config.EnvyAurasLocale;
+import com.envyful.auras.config.*;
 import com.envyful.auras.listener.PlayerInteractListener;
 import com.envyful.auras.particle.AuraRegistry;
+import com.envyful.auras.particle.AuraType;
 import com.envyful.auras.requirement.AuraRequirement;
 import com.envyful.auras.task.AuraTask;
 import com.pixelmonmod.api.pokemon.PokemonSpecificationProxy;
@@ -59,10 +57,9 @@ public class EnvyAuras {
         PlatformProxy.setHandler(ForgePlatformHandler.getInstance());
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
 
-        AuraRegistry.init();
+        ConfigTypeSerializer.register(new AuraTypeSerializer(), AuraType.class);
 
-        UtilPlayer.registerPermission("com.envyful.auras.command.auras");
-        UtilPlayer.registerPermission("com.envyful.auras.command.give");
+        AuraRegistry.init();
 
         MinecraftForge.EVENT_BUS.register(this);
         Pixelmon.EVENT_BUS.register(this);

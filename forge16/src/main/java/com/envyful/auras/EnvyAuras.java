@@ -2,6 +2,7 @@ package com.envyful.auras;
 
 import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.concurrency.UtilLogger;
+import com.envyful.api.config.ConfigTypeSerializer;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.forge.command.ForgeCommandFactory;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
@@ -11,19 +12,15 @@ import com.envyful.api.gui.factory.GuiFactory;
 import com.envyful.api.platform.PlatformProxy;
 import com.envyful.auras.command.AuraTabCompleter;
 import com.envyful.auras.command.AurasCommand;
-import com.envyful.auras.config.Aura;
-import com.envyful.auras.config.EnvyAurasConfig;
-import com.envyful.auras.config.EnvyAurasGraphics;
-import com.envyful.auras.config.EnvyAurasLocale;
+import com.envyful.auras.config.*;
 import com.envyful.auras.listener.PlayerInteractListener;
 import com.envyful.auras.particle.AuraRegistry;
+import com.envyful.auras.particle.AuraType;
 import com.envyful.auras.requirement.AuraRequirement;
 import com.envyful.auras.task.AuraTask;
 import com.pixelmonmod.api.pokemon.PokemonSpecificationProxy;
 import com.pixelmonmod.pixelmon.Pixelmon;
-import com.pixelmonmod.pixelmon.api.command.PixelmonCommandUtils;
 import com.pixelmonmod.pixelmon.api.events.init.PixelmonInitEvent;
-import com.pixelmonmod.tcg.api.accessors.RequirementRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -59,6 +56,8 @@ public class EnvyAuras {
         PlatformProxy.setPlayerManager(this.playerManager);
         PlatformProxy.setHandler(ForgePlatformHandler.getInstance());
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
+
+        ConfigTypeSerializer.register(new AuraTypeSerializer(), AuraType.class);
 
         AuraRegistry.init();
 
