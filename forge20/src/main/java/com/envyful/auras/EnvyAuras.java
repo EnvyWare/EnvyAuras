@@ -1,10 +1,10 @@
 package com.envyful.auras;
 
-import com.envyful.api.concurrency.UtilConcurrency;
 import com.envyful.api.concurrency.UtilLogger;
 import com.envyful.api.config.ConfigTypeSerializer;
 import com.envyful.api.config.yaml.YamlConfigFactory;
 import com.envyful.api.forge.command.ForgeCommandFactory;
+import com.envyful.api.forge.concurrency.ForgeTaskBuilder;
 import com.envyful.api.forge.gui.factory.ForgeGuiFactory;
 import com.envyful.api.forge.platform.ForgePlatformHandler;
 import com.envyful.api.forge.player.ForgePlayerManager;
@@ -31,7 +31,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Mod(EnvyAuras.MOD_ID)
 public class EnvyAuras {
@@ -65,7 +64,11 @@ public class EnvyAuras {
         Pixelmon.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new PlayerInteractListener());
 
-        UtilConcurrency.runRepeatingTask(new AuraTask(), 100, 25, TimeUnit.MILLISECONDS);
+        new ForgeTaskBuilder().task(new AuraTask())
+                .delay(100)
+                .async(false)
+                .interval(1)
+                .start();
     }
 
     @SubscribeEvent
