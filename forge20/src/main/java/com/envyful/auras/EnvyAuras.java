@@ -55,6 +55,7 @@ public class EnvyAuras {
         PlatformProxy.setPlayerManager(this.playerManager);
         PlatformProxy.setHandler(ForgePlatformHandler.getInstance());
         GuiFactory.setPlatformFactory(new ForgeGuiFactory());
+        GuiFactory.setPlayerManager(this.playerManager);
 
         ConfigTypeSerializer.register(new AuraTypeSerializer(), AuraType.class);
 
